@@ -3,8 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from core import settings
 
 app = FastAPI(
-    title="Warm Transfer Backend",
-    description="Backend service to manage LiveKit calls and LLM summarization.",
+    title="Calby",
+    description="Backend service to manage LiveKit calls and LLM summarization",
     version="0.1.0",
     docs_url="/docs",
     redoc_url="/redoc"

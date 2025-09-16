@@ -6,6 +6,8 @@ class Settings(BaseSettings):
     DEBUG: bool = False
     API_PREFIX: str = "/api/v1"
 
+    GOOGLE_API_KEY: str = ""
+
     @property
     def allowed_origins_list(self) -> List[str]:
         if self.ALLOWED_ORIGINS:
