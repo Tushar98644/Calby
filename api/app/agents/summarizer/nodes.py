@@ -2,7 +2,7 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 from .state import AgentState
 from core import settings
 
-llm = ChatGoogleGenerativeAI(model="gemini-pro", google_api_key=settings.GOOGLE_API_KEY)
+llm = ChatGoogleGenerativeAI(model="gemini-2.5-pro", google_api_key=settings.GOOGLE_API_KEY)
 
 def generate_summary_node(state: AgentState):
     print("Generating summary...")

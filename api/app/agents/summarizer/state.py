@@ -1,5 +1,5 @@
-from typing import TypedDict
+from typing import TypedDict, NotRequired
 
 class AgentState(TypedDict):
     transcript: str
-    summary: str
+    summary: NotRequired[str]

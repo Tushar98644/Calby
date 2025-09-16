@@ -1,5 +1,6 @@
 from pydantic_settings import BaseSettings
 from typing import List
+from pydantic import BaseModel
 
 class Settings(BaseSettings):
     ALLOWED_ORIGINS: str = ""
@@ -18,4 +19,8 @@ class Settings(BaseSettings):
         env_file = ".env"
         env_file_encoding = "utf-8"
 
+
+class SummaryRequest(BaseModel):
+    transcript: str
+    
 settings = Settings()
