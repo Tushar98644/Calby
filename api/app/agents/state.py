@@ -1,5 +1,6 @@
 from typing import TypedDict, NotRequired
 
-class AgentState(TypedDict):
+class ConversationState(TypedDict):
     transcript: str
+    needs_transfer: bool
     summary: NotRequired[str]
