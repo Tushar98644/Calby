@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "fastapi[standard]>=0.116.2",
+    "httpx>=0.28.1",
     "langchain-google-genai>=2.1.12",
     "livekit-agents[cartesia,deepgram]~=1.2",
     "livekit-plugins-langchain~=1.1",

@@ -1,2 +1,2 @@
 from .support_agent import SupportAgent, support_agent_entrypoint
-from .specialist_agent import TransferAgent, transfer_agent_entrypoint
+from .specialist_agent import SpecialistAgent, specialist_agent_entrypoint

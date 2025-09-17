@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 from livekit import agents
-from agents.livekit_agents import support_agent_entrypoint, transfer_agent_entrypoint
+from agents.livekit_agents import support_agent_entrypoint, specialist_agent_entrypoint
 
 root_dir = Path(__file__).parent.parent
 env_path = root_dir / ".env"
@@ -16,8 +16,8 @@ async def main_entrypoint(ctx: agents.JobContext):
     print(f"🎯 Agent requested for room: {room_name}")
     
     if "consult" in room_name or "specialist" in room_name:
-        print("🔄 Starting Transfer Agent (Agent B)")
-        await transfer_agent_entrypoint(ctx)
+        print("🔄 Starting Specialist Agent (Agent B)")
+        await specialist_agent_entrypoint(ctx)
     else:
         print("📞 Starting Support Agent (Agent A)")  
         await support_agent_entrypoint(ctx)

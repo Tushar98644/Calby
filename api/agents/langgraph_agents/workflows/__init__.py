@@ -1,2 +1,3 @@
 from .support_workflow import create_support_workflow
 from .transfer_workflow import create_transfer_workflow
+from .chat_workflow import create_chat_workflow
