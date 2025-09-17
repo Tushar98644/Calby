@@ -1,9 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.agents.summarizer.state import AgentState
 from core import settings
-from .agents.summarizer import summarizer_app
-from .schemas import SummaryRequest, SummaryResponse
+from routers import call_router
 
 app = FastAPI(
     title="Calby",
@@ -21,13 +19,8 @@ app.add_middleware(
     allow_headers=["*"]
 )
 
-@app.get("/")
-def root():
-    return {"message": "Warm transfer backend running!"}
+app.include_router(call_router, prefix="/api/v1", tags=["Call Management"])
 
-@app.post("/generate-summary", response_model=SummaryResponse)
-async def generate_summary(request: SummaryRequest) -> SummaryResponse:
-    inputs: AgentState = {"transcript": request.transcript}
-    result = summarizer_app.invoke(inputs)
-    
-    return SummaryResponse(summary=result.get("summary", "No summary could be generated."))
+@app.get("/")
+async def root():
+    return {"message": "Hello World"}
