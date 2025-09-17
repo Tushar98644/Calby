@@ -60,15 +60,6 @@ If a transfer is NOT required, simply continue the conversation naturally and he
 
     return {"messages": new_messages}
 
-
 def specialist_node(state: ConversationState) -> dict:
-    messages = state.get("messages", [])
-    last_message = messages[-1] if messages else None
-
-    summary_brief = last_message.additional_kwargs.get("summary", "your request")
-
-    greeting_content = f"Hello, I'm a specialist. I've been briefed that you need help with: '{summary_brief}'. How can I best assist you?"
-
-    specialist_greeting = AIMessage(content=greeting_content)
-
-    return {"messages": messages + [specialist_greeting]}
+    state["messages"] = llm.invoke(state["messages"])
+    return state

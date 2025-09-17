@@ -2,8 +2,7 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 from livekit import agents
-from .support_agent import support_agent_entrypoint  
-from .transfer_agent import transfer_agent_entrypoint
+from agents.livekit_agents import support_agent_entrypoint, transfer_agent_entrypoint
 
 root_dir = Path(__file__).parent.parent
 env_path = root_dir / ".env"
