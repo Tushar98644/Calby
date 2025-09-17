@@ -1,33 +1,45 @@
-from fastapi import APIRouter, HTTPException
-from services import livekit_service
-from agents import summarizer
+import uuid
+from fastapi import APIRouter, HTTPException, BackgroundTasks, Query
 from pydantic import BaseModel
 
-class SummaryRequest(BaseModel):
-    transcript: str
-    
+from services import transfer_manager
+from services import livekit_service
+
+class TransferRequest(BaseModel):
+    customer_room_name: str
+    customer_identity: str
+    summary: str
+
 router = APIRouter()
 
-@router.get('/get-livekit-token')
-def get_livekit_token(room_name: str, identity: str):
+@router.get("/get-livekit-token")
+def get_livekit_token(
+    room_name: str = Query(..., description="The room the user wants to join"),
+    identity: str = Query(..., description="The unique identity of the user")
+):
     try:
         token = livekit_service.create_access_token(identity=identity, room_name=room_name)
         return {"token": token}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to generate token: {str(e)}")
-    
 
-@router.post("/generate-summary", tags=["AI Agent"])
-def generate_summary_route(request: SummaryRequest):
-    """
-    Accepts a call transcript and returns an AI-generated summary.
-    """
-    if not request.transcript:
-        raise HTTPException(status_code=400, detail="Transcript cannot be empty.")
+@router.post("/start-call")
+async def start_call():
+    room_name = f"customer-room-{uuid.uuid4().hex[:8]}"
+    await livekit_service.create_room(room_name)
+
+    return {"message": "Call initiated, room created.", "room_name": room_name}
+
+@router.post("/initiate-warm-transfer")
+async def handle_initiate_transfer(request: TransferRequest, background_tasks: BackgroundTasks):
+    if not all([request.customer_room_name, request.customer_identity, request.summary]):
+        raise HTTPException(status_code=400, detail="Missing required transfer information.")
+
+    background_tasks.add_task(
+        transfer_manager.initiate_transfer,
+        customer_room_name=request.customer_room_name,
+        customer_identity=request.customer_identity,
+        summary=request.summary,
+    )
     
-    try:
-        summary = summarizer.get_summary(request.transcript)
-        return {"summary": summary}
-    except Exception as e:
-        print(f"Error during summary generation: {e}")
-        raise HTTPException(status_code=500, detail="Failed to generate summary.")
+    return {"message": "Warm transfer process acknowledged and has been initiated."}
