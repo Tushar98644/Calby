@@ -13,7 +13,7 @@ class Settings(BaseSettings):
 
     LIVEKIT_API_KEY: str
     LIVEKIT_API_SECRET: str
-    LIVEKIT_HOST: str
+    LIVEKIT_URL: str
     DEEPGRAM_API_KEY: str
     CARTESIA_API_KEY: str
 

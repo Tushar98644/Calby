@@ -1,5 +1,5 @@
 [project]
-name = "api"
+name = "Calby-api"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
@@ -7,8 +7,13 @@ requires-python = ">=3.13"
 dependencies = [
     "fastapi[standard]>=0.116.2",
     "langchain-google-genai>=2.1.12",
-    "langgraph>=0.6.7",
-    "livekit-agents[cartesia,deepgram,silero,turn-detector]~=1.2",
-    "livekit-plugins-noise-cancellation~=0.2",
+    "livekit-agents[cartesia,deepgram]~=1.2",
+    "livekit-plugins-langchain~=1.1",
     "pydantic-settings>=2.10.1",
+    "python-dotenv>=1.1.1",
 ]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["app*", "agents*"]
+exclude = ["tests*"]
