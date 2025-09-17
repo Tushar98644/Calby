@@ -1,6 +1,6 @@
 from typing import TypedDict, NotRequired
 
 class ConversationState(TypedDict):
-    transcript: str
     needs_transfer: bool
+    transfer_reason: NotRequired[str]
     summary: NotRequired[str]
