@@ -1,42 +1,29 @@
-import asyncio
-import uuid
-from livekit import api
+import json
+
 from .livekit_service import livekit_service
 
 class TransferManager:
     def __init__(self):
-        self.livekit_api = livekit_service.livekit_api
+        self.livekit_service = livekit_service
 
-    async def initiate_transfer(self, customer_room_name: str, customer_identity: str, summary: str):
-        print(f"🔥 TRANSFER MANAGER: Initiating warm transfer for '{customer_identity}'")
+    async def initiate_transfer(self, customer_room_name: str, agent_a_identity: str, summary: str):
+        print(f"🔥 TRANSFER MANAGER: Initiating in-room handoff in '{customer_room_name}'")
 
-        consult_room_name = f"consult-{uuid.uuid4().hex[:8]}"
-        
-        await livekit_service.create_room(
-            consult_room_name,
-            metadata=f'{{"summary": "{summary}"}}'
-        )
-        print(f"🔥 TRANSFER MANAGER: Created consult room '{consult_room_name}' with summary.")
+        summary_metadata = json.dumps({"summary": summary})
 
-        await asyncio.sleep(5) 
-        print(f"🔥 TRANSFER MANAGER: Moving customer to consult room...")
-        
         try:
-            await self.livekit_api.room.move_participant(
-                api.MoveParticipantRequest(
-                    room=customer_room_name,
-                    identity=customer_identity,
-                    destination_room=consult_room_name,
-                )
+            print("🚀 Dispatching 'specialist-agent'...")
+            await self.livekit_service.create_agent_dispatch(
+                room_name=customer_room_name,
+                agent_name="specialist-agent",
+                metadata=summary_metadata
             )
-            print(f"✅ TRANSFER MANAGER: Customer move successful!")
+            
+            print(f"✅ Specialist agent dispatched to room '{customer_room_name}'.")
         except Exception as e:
-            print(f"❌ TRANSFER MANAGER: Error moving participant: {e}")
+            print(f"❌ Error dispatching agents: {e}")
             return {"success": False, "error": str(e)}
 
-        print(f"🔥 TRANSFER MANAGER: Cleaning up original room '{customer_room_name}'...")
-        await livekit_service.delete_room(customer_room_name)
-
-        return {"success": True, "new_room": consult_room_name}
+        return {"success": True, "room": customer_room_name}
 
 transfer_manager = TransferManager()

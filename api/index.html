@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>LiveKit Agent Test Client</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        input { width: 400px; padding: 8px; margin-bottom: 10px; }
+        button { padding: 10px 15px; }
+        #remote-media { margin-top: 20px; border: 1px solid #ccc; padding: 10px; min-height: 100px; }
+    </style>
+</head>
+<body>
+    <h1>LiveKit Agent Test Client</h1>
+    <div>
+        <label for="url">LiveKit URL:</label><br>
+        <input type="text" id="url" value="wss://calby-8axq1be9.livekit.cloud">
+    </div>
+    <div>
+        <label for="token">Access Token:</label><br>
+        <input type="text" id="token" placeholder="">
+    </div>
+    <button id="connectBtn">Connect</button>
+    <button id="disconnectBtn" disabled>Disconnect</button>
+    <div id="status">Status: Disconnected</div>
+
+    <h2>Remote Participants</h2>
+    <div id="remote-media"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/livekit-client@2.2.0/dist/livekit-client.umd.min.js"></script>
+
+    <script>
+        const { Room, RoomEvent } = LivekitClient;
+        const urlInput = document.getElementById('url');
+        const tokenInput = document.getElementById('token');
+        const connectBtn = document.getElementById('connectBtn');
+        const disconnectBtn = document.getElementById('disconnectBtn');
+        const statusDiv = document.getElementById('status');
+        const remoteMediaDiv = document.getElementById('remote-media');
+        
+        let currentRoom = null;
+
+        async function connectToRoom() {
+            const room = new Room({
+                publishDefaults: {
+                    audio: true,
+                    video: false
+                },
+            });
+
+            currentRoom = room;
+
+            statusDiv.textContent = 'Status: Connecting...';
+            connectBtn.disabled = true;
+
+            room.on(RoomEvent.ParticipantConnected, (participant) => {
+                console.log('Participant connected:', participant.identity);
+                participant.on(RoomEvent.TrackSubscribed, (track) => {
+                    const element = track.attach();
+                    remoteMediaDiv.appendChild(element);
+                });
+            });
+
+            try {
+                await room.connect(urlInput.value, tokenInput.value);
+                statusDiv.textContent = `Status: Connected to room '${room.name}'`;
+                await room.localParticipant.setMicrophoneEnabled(true);
+                disconnectBtn.disabled = false;
+            } catch (error) {
+                console.error('Failed to connect', error);
+                statusDiv.textContent = 'Status: Connection failed';
+                connectBtn.disabled = false;
+            }
+        }
+
+        function disconnectFromRoom() {
+            if (currentRoom) {
+                currentRoom.disconnect();
+                currentRoom = null;
+                statusDiv.textContent = 'Status: Disconnected';
+                remoteMediaDiv.innerHTML = '';
+                connectBtn.disabled = false;
+                disconnectBtn.disabled = true;
+            }
+        }
+
+        connectBtn.addEventListener('click', connectToRoom);
+        disconnectBtn.addEventListener('click', disconnectFromRoom);
+    </script>
+</body>
+</html>

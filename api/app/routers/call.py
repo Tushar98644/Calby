@@ -2,12 +2,12 @@ import uuid
 from fastapi import APIRouter, HTTPException, BackgroundTasks, Query
 from pydantic import BaseModel
 
-from services import transfer_manager
-from services import livekit_service
+from services.transfer_service import transfer_manager
+from services.livekit_service import livekit_service
 
 class TransferRequest(BaseModel):
     customer_room_name: str
-    customer_identity: str
+    agent_a_identity: str  
     summary: str
 
 router = APIRouter()
@@ -27,18 +27,17 @@ def get_livekit_token(
 async def start_call():
     room_name = f"customer-room-{uuid.uuid4().hex[:8]}"
     await livekit_service.create_room(room_name)
-
     return {"message": "Call initiated, room created.", "room_name": room_name}
 
 @router.post("/initiate-warm-transfer")
 async def handle_initiate_transfer(request: TransferRequest, background_tasks: BackgroundTasks):
-    if not all([request.customer_room_name, request.customer_identity, request.summary]):
+    if not all([request.customer_room_name, request.agent_a_identity, request.summary]):
         raise HTTPException(status_code=400, detail="Missing required transfer information.")
 
     background_tasks.add_task(
         transfer_manager.initiate_transfer,
         customer_room_name=request.customer_room_name,
-        customer_identity=request.customer_identity,
+        agent_a_identity=request.agent_a_identity,
         summary=request.summary,
     )
     
