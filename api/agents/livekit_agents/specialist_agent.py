@@ -13,7 +13,7 @@ class SpecialistAgent(Agent):
                     Your first response to the customer MUST start by greeting them, then repeat the summary you heard and ask for confirmation.
                     For example, if you hear 'The user has a billing issue', your response should be: 'Hello, I understand you have a billing issue, is that correct?'"""
         )
-        
+
 async def specialist_agent_entrypoint(ctx: agents.JobContext):
     summary_text = "I'm a specialist who can help with your issue."
     if ctx.job.metadata:
@@ -32,7 +32,3 @@ async def specialist_agent_entrypoint(ctx: agents.JobContext):
     )
 
     await session.start(room=ctx.room, agent=SpecialistAgent())
-    
-    greeting = f"Hello. {summary_text}"
-    print(f"Specialist Agent proactively speaking: '{greeting}'")
-    await session.say(text=greeting)

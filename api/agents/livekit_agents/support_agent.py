@@ -31,10 +31,9 @@ async def support_agent_entrypoint(ctx: agents.JobContext):
         except (json.JSONDecodeError, TypeError):
             pass
 
-    async def handle_transfer(summary: str):
+    async def handle_transfer(summary: str):        
         print("✅ Transfer signal detected. Requesting specialist agent...")
         agent_identity = ctx.room.local_participant.identity
-
         try:
             await http_client.post(
                 "http://localhost:8000/api/v1/initiate-warm-transfer",
@@ -73,6 +72,7 @@ async def support_agent_entrypoint(ctx: agents.JobContext):
     graph = create_support_workflow()
     
     session = AgentSession(
+        turn_detection="manual",
         stt=deepgram.STT(model="nova-2", language="en-US"),
         llm=langchain.LLMAdapter(graph=graph),
         tts=cartesia.TTS(model="sonic-2"),
