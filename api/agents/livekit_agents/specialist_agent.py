@@ -1,6 +1,7 @@
 import json
+import asyncio
 from dotenv import load_dotenv
-from livekit import agents
+from livekit import agents, rtc
 from livekit.agents import Agent, AgentSession
 from livekit.plugins import deepgram, cartesia, langchain
 from agents.langgraph_agents.workflows.chat_workflow import create_chat_workflow
@@ -15,6 +16,18 @@ class SpecialistAgent(Agent):
         )
 
 async def specialist_agent_entrypoint(ctx: agents.JobContext):
+    handoff_complete_event = asyncio.Event()
+        
+    @ctx.room.on("data_received")
+    def on_data_received(data: rtc.DataPacket):
+        try:
+            message = json.loads(data.data.decode('utf-8'))
+            if message.get("type") == "handoff_complete":
+                    print("✅ Received handoff completion signal")
+                    handoff_complete_event.set()
+        except (json.JSONDecodeError, KeyError):
+            pass
+                
     summary_text = "I'm a specialist who can help with your issue."
     if ctx.job.metadata:
         try:
@@ -30,5 +43,14 @@ async def specialist_agent_entrypoint(ctx: agents.JobContext):
         llm=langchain.LLMAdapter(graph=graph),
         tts=cartesia.TTS(voice="a167e0f3-df7e-4d52-a9c3-f949145efdab"),
     )
-
+    
     await session.start(room=ctx.room, agent=SpecialistAgent())
+   
+    print("⏳ Specialist waiting for handoff completion...")
+    try:
+        await asyncio.wait_for(handoff_complete_event.wait(), timeout=30.0)
+        await session.say(summary_text, allow_interruptions=False)
+    except asyncio.TimeoutError:
+           print("⚠️ Timed out waiting for handoff completion")
+           
+    await session.say(summary_text, allow_interruptions=False)

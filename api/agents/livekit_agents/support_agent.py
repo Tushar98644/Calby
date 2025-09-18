@@ -66,13 +66,16 @@ async def support_agent_entrypoint(ctx: agents.JobContext):
         print(f"🗣️ Support Agent speaking summary: '{summary_utterance}'")
         await session.say(text=summary_utterance, allow_interruptions=False)
         
+        await ctx.room.local_participant.publish_data(
+            json.dumps({"type": "handoff_complete"}).encode('utf-8'),
+        )
+            
         print("👋 Summary delivered. Support Agent shutting down.")
         ctx.shutdown()
 
     graph = create_support_workflow()
     
     session = AgentSession(
-        turn_detection="manual",
         stt=deepgram.STT(model="nova-2", language="en-US"),
         llm=langchain.LLMAdapter(graph=graph),
         tts=cartesia.TTS(model="sonic-2"),
@@ -94,6 +97,6 @@ async def support_agent_entrypoint(ctx: agents.JobContext):
     
     await session.say(
         "Hello! Thank you for calling. How can I help you today?",
-        allow_interruptions=True,
-        add_to_chat_ctx=True
+        allow_interruptions=False,
+        add_to_chat_ctx=False
     )
