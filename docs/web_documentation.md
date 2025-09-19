@@ -42,7 +42,7 @@ The `SessionView` is the core of the application, displaying the media tiles, ch
 
 ## Component Flow Diagram
 
-![Component Architecture](assets/web_architecture.png)
+![Component Architecture](../assets/web_architecture.png)
 
 ## Components
 

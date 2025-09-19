@@ -93,7 +93,7 @@ To learn more about the architecture of the application, please refer to the fol
 
 - **Overall Architecture**: [Architecture Overview](docs/architecture.md)
 - **Backend Details**: [API Documentation](docs/api_documentation.md)
-- **Frontend Details**: [Frontend Documentation](docs/frontend.md)
+- **Frontend Details**: [Web Documentation](docs/web_documentation.md)
 
 ## Technologies Used
 
