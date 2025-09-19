@@ -41,18 +41,31 @@ uv pip sync
 
 ### Step 2: Configure Environment Variables
 
-Create a `.env` file in the `api/` directory by copying the example file if one exists, or creating a new one. Add the following variables:
+Create a `.env` file in the `api/` directory by copying `api/.env.example`. It should contain the following variables:
 
 ```env
-# LiveKit Credentials
-LIVEKIT_URL=
-LIVEKIT_API_KEY=
-LIVEKIT_API_SECRET=
+# LiveKit API credentials
+LIVEKIT_API_KEY=""
+LIVEKIT_API_SECRET=""
+LIVEKIT_URL=""
 
-# AI Service Keys
-GOOGLE_API_KEY=
-DEEPGRAM_API_KEY=
-CARTESIA_API_KEY=
+# Google API Key for Generative AI
+GOOGLE_API_KEY=""
+
+# Deepgram API Key for Speech-to-Text
+DEEPGRAM_API_KEY=""
+
+# Cartesia API Key for Text-to-Speech
+CARTESIA_API_KEY=""
+
+# CORS - A comma-separated list of allowed origins
+ALLOWED_ORIGINS="http://localhost:3000"
+
+# Set to True for development
+DEBUG=True
+
+# API Prefix
+API_PREFIX="/api/v1"
 ```
 
 ### Step 3: Run the Backend Services

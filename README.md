@@ -10,63 +10,46 @@ Calby is a sophisticated voice agent application designed to provide a seamless 
 <summary>Mermaid Diagram</summary>
 
 ```mermaid
-graph TD
-    subgraph "User"
-        A[Browser]
-    end
-
-    subgraph "Frontend (Next.js)"
-        B[Next.js App]
-    end
-
-    subgraph "Backend (FastAPI)"
-        C[API Server]
-        D[LiveKit Service]
-        E[Transfer Service]
-    end
-
-    subgraph "LiveKit Cloud"
-        F[LiveKit SFU Room]
-    end
-
-    subgraph "AI Agent Workers"
-        G[Support Agent Worker]
-        H[Specialist Agent Worker]
-    end
-
-    subgraph "AI Services"
-        I[Google Gemini]
-        J[Deepgram (STT)]
-        K[Cartesia (TTS)]
-    end
-
-    subgraph "LangGraph Workflows"
-        L[Support Workflow]
-        M[Chat Workflow]
-    end
-
-    A -- "Interacts with" --> B;
-    B -- "API Calls" --> C;
-    B -- "Connects to" --> F;
-
-    C -- "Uses" --> D;
-    C -- "Uses" --> E;
-    D -- "Manages" --> F;
-
-    E -- "Dispatches" --> H;
-
-    G -- "Connects to" --> F;
-    H -- "Connects to" --> F;
-
-    G -- "Uses" --> J;
-    G -- "Uses" --> K;
-    G -- "Uses" --> L;
-    L -- "Uses" --> I;
-
-    H -- "Uses" --> J;
-    H -- "Uses" --> K;
-    H -- "Uses" --> M;
-    M -- "Uses" --> I;
+flowchart TD
+ subgraph User["User"]
+        A["Browser"]
+  end
+ subgraph subGraph1["Frontend (Next.js)"]
+        B["Next.js App"]
+  end
+ subgraph subGraph2["Backend (FastAPI)"]
+        C["API Server"]
+        D["LiveKit Service"]
+        E["Transfer Service"]
+  end
+ subgraph subGraph3["LiveKit Cloud"]
+        F["LiveKit SFU Room"]
+  end
+ subgraph subGraph4["AI Agent Workers"]
+        G["Support Agent Worker"]
+        H["Specialist Agent Worker"]
+  end
+ subgraph subGraph5["AI Services"]
+        I["Google Gemini"]
+        J["Deepgram STT"]
+        K["Cartesia TTS"]
+  end
+ subgraph subGraph6["LangGraph Workflows"]
+        L["Support Workflow"]
+        M["Chat Workflow"]
+  end
+    A -- HTTPS --> B
+    B -- Uses --> C
+    C -- WebSocket --> H
+    B -- API Calls --> D
+    D -- Manages --> E & F
+    E -- Interacts with --> H
+    F -- Coordinates --> G
+    G -- Uses --> L & M & J & K
+    L -- Contains --> N["N"]
+    M -- Contains --> O["O"]
+    N -- Uses --> I
+    O -- Uses --> I
 ```
 
 </details>
@@ -103,4 +86,4 @@ To learn more about the architecture of the application, please refer to the fol
 
 ## License
 
-This project is licensed under the GNU General Public License v3.0. See the `LICENSE` file for more details.
+This project is licensed under the GNU General Public License v3.0. See the [LICENSE](LICENSE) file for more details.
