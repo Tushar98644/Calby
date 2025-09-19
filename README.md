@@ -2,6 +2,68 @@
 
 Calby is a sophisticated voice agent application designed to provide a seamless and intelligent customer support experience. It leverages a powerful stack of technologies, including LiveKit for real-time communication, LangChain and Google Gemini for advanced AI capabilities, and a modern Next.js frontend for an intuitive user interface.
 
+## System Architecture
+
+![System Architecture](assets/architecture.png)
+
+<details>
+<summary>Mermaid Diagram</summary>
+
+```mermaid
+graph TD
+    subgraph "User"
+        A[Browser]
+    end
+
+    subgraph "Frontend (Next.js on Vercel)"
+        B[Next.js App]
+        C[LiveKit Components]
+    end
+
+    subgraph "Backend (FastAPI on Cloud Run)"
+        D[FastAPI Server]
+        E[LiveKit Service]
+        F[Transfer Service]
+        G[AI Agents]
+    end
+
+    subgraph "LiveKit Cloud"
+        H[LiveKit SFU]
+    end
+
+    subgraph "AI Services"
+        I[Google Gemini]
+        J[Deepgram (STT)]
+        K[Cartesia (TTS)]
+    end
+
+    subgraph "LangGraph Workflows"
+        L[Support Workflow]
+        M[Chat Workflow]
+        N[decide_transfer_node]
+        O[specialist_node]
+    end
+
+    A -- HTTPS --> B;
+    B -- Uses --> C;
+    C -- WebSocket --> H;
+    B -- API Calls --> D;
+    D -- Manages --> E;
+    D -- Manages --> F;
+    E -- Interacts with --> H;
+    F -- Coordinates --> G;
+    G -- Uses --> L;
+    G -- Uses --> M;
+    L -- Contains --> N;
+    M -- Contains --> O;
+    N -- Uses --> I;
+    O -- Uses --> I;
+    G -- Uses --> J;
+    G -- Uses --> K;
+```
+
+</details>
+
 This repository is organized into two main parts:
 
 - `api/`: A Python-based backend powered by FastAPI that manages real-time communication, AI agent logic, and call handling.
