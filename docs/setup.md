@@ -110,10 +110,13 @@ bun install
 
 ### Step 2: Configure Environment Variables
 
-Create a `.env.local` file in the `web/` directory. You will need to add the URL for your LiveKit instance:
+Create a `.env.local` file in the `web/` directory by copying `web/.env.example`. It should contain the following variables:
 
 ```env
-NEXT_PUBLIC_LIVEKIT_URL=
+LIVEKIT_API_KEY=<your_api_key>
+LIVEKIT_API_SECRET=<your_api_secret>
+LIVEKIT_URL=wss://<project-subdomain>.livekit.cloud
+FASTAPI_BACKEND_URL=http://localhost:8000
 ```
 
 ### Step 3: Run the Frontend Development Server
