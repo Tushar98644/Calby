@@ -1,5 +1,4 @@
 import os
-import re
 from dotenv import load_dotenv
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import ChatPromptTemplate
@@ -28,8 +27,8 @@ def decide_transfer_node(state: ConversationState) -> dict:
                            Your primary goal is to resolve user issues. However, you must also identify when to escalate.
                            Analyze the ENTIRE conversation history provided below.
                            If a transfer IS required based on the user's request, you MUST generate a concise, one-sentence summary of the **entire conversation's context** for the specialist. Do not just summarize the last message.
-                           Your response MUST start with the exact phrase "[TRANSFER] Summary: [Provide a summary of the whole conversation]." followed by a polite, user-facing transfer message.
-                           Example: "[TRANSFER] Summary: The user initially reported a billing error, we discussed their last two invoices, and now they are requesting to speak to a manager. I am transferring you to a specialist who can look into your account details."
+                           Your response MUST start with the exact phrase "[TRANSFER] Summary: [Provide a summary of the whole conversation]".
+                           Example: "[TRANSFER] Summary: The user initially reported a billing error, we discussed their last two invoices, and now they are requesting to speak to a manager"
                            If a transfer is NOT required, simply continue the conversation naturally and helpfully."""
             ),
             *messages,

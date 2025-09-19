@@ -12,7 +12,7 @@ This is the backend for the Calby voice agent application, built with FastAPI. I
 1.  **Create a virtual environment:**
 
     ```bash
-    python3 -m venv .venv
+    uv venv
     source .venv/bin/activate
     ```
 

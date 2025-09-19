@@ -6,7 +6,7 @@ from livekit import agents, rtc
 from livekit.agents import Agent, AgentSession, ConversationItemAddedEvent
 from livekit.agents.llm import ChatMessage
 from livekit.plugins import deepgram, cartesia, langchain
-from agents.langgraph_agents.workflows.support_workflow import create_support_workflow
+from agents.langgraph_workflows.workflows.support_workflow import create_support_workflow
 
 import json
 
@@ -31,7 +31,9 @@ async def support_agent_entrypoint(ctx: agents.JobContext):
         except (json.JSONDecodeError, TypeError):
             pass
 
-    async def handle_transfer(summary: str):        
+    async def handle_transfer(summary: str):
+        transfer_announcement = "I am transferring you to a specialist. Please hold while I connect you."
+        await session.say(text=transfer_announcement, allow_interruptions=False)
         print("✅ Transfer signal detected. Requesting specialist agent...")
         agent_identity = ctx.room.local_participant.identity
         try:

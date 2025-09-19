@@ -1,6 +1,6 @@
 from langgraph.graph import StateGraph, END
-from agents.langgraph_agents.nodes import specialist_node
-from agents.langgraph_agents.state import ConversationState
+from agents.langgraph_workflows.nodes import specialist_node
+from agents.langgraph_workflows.state import ConversationState
 
 def create_chat_workflow():
     workflow = StateGraph(ConversationState)
