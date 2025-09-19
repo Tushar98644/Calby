@@ -81,13 +81,13 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000
 **Terminal 2: Run the Support Agent Worker**
 
 ```bash
-python -m agents.run_support
+python -m agents.run_support dev
 ```
 
 **Terminal 3: Run the Specialist Agent Worker**
 
 ```bash
-python -m agents.run_specialist
+python -m agents.run_specialist dev
 ```
 
 ## 2. Frontend Setup (`web/`)
