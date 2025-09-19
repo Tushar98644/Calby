@@ -11,7 +11,7 @@ Calby operates on a client-server model, composed of two main parts:
 
 These two components communicate with each other and with several external services to deliver a seamless experience.
 
-![High-Level Architecture Diagram](https://raw.githubusercontent.com/livekit-examples/calby/main/docs/calby-high-level.png)
+![High-Level Architecture Diagram](../assets/architecture.png)
 
 ### Core Technologies
 
@@ -24,8 +24,6 @@ These two components communicate with each other and with several external servi
 
 The backend is a high-performance FastAPI application responsible for all server-side logic.
 
-![Backend Architecture Diagram](https://raw.githubusercontent.com/livekit-examples/calby/main/docs/calby-backend.png)
-
 ### Key Components:
 
 1.  **FastAPI Application (`app/`)**:
@@ -37,7 +35,7 @@ The backend is a high-performance FastAPI application responsible for all server
 
 2.  **LiveKit Agents (`agents/`)**:
 
-    - This is the core of the AI functionality, where the voice agents are defined. The agents are built using the `livekit-agents` Python SDK.
+    - This is the core of the AI
     - **Support Agent (`agents/livekit_agents/support_agent.py`)**: The first point of contact for the user. It listens to the user, transcribes their speech using Deepgram, and uses a LangGraph workflow to decide if a transfer is needed.
     - **Specialist Agent (`agents/livekit_agents/specialist_agent.py`)**: A second-level agent that handles more complex queries. It receives context from the support agent during a transfer.
     - **Agent Entrypoints (`run_support.py`, `run_specialist.py`)**: These scripts are the entry points for running the agent workers. They connect to the LiveKit room and wait for jobs.
@@ -46,7 +44,7 @@ The backend is a high-performance FastAPI application responsible for all server
 
     - LangGraph is used to define the conversational flow and decision-making logic for the agents as a state machine.
     - **State (`state.py`)**: Defines the conversation state, which includes the history of messages.
-    - **Nodes (`nodes.py`)**: These are the steps in the graph. For example, `decide_transfer_node` uses the Gemini LLM to analyze the conversation and determine if a transfer is necessary.
+    - **Nodes (`nodes.py`)**: These are the steps in the graph. For example
     - **Workflows (`workflows/`)**: Defines the structure of the agent's logic, connecting the nodes into a coherent flow.
 
 4.  **Configuration and Dependencies**:
@@ -56,8 +54,6 @@ The backend is a high-performance FastAPI application responsible for all server
 ## Frontend Architecture (`web/`)
 
 The frontend is a responsive and interactive user interface built with Next.js.
-
-![Frontend Architecture Diagram](https://raw.githubusercontent.com/livekit-examples/calby/main/docs/calby-frontend.png)
 
 ### Key Components:
 
@@ -92,3 +88,7 @@ The frontend is a responsive and interactive user interface built with Next.js.
     - **`.env.local`**: Stores frontend-specific environment variables, such as the LiveKit URL.
     - **`package.json`**: Manages all Node.js dependencies.
     - **`app-config.ts`**: Defines default configuration values for the UI, such as titles and logos, which can be overridden remotely.
+
+## API Documentation
+
+For detailed information about the API endpoints, request/response formats, and authentication, please refer to the [API Documentation](api_documentation.md).

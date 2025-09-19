@@ -42,20 +42,7 @@ The `SessionView` is the core of the application, displaying the media tiles, ch
 
 ## Component Flow Diagram
 
-```mermaid
-graph TD
-    A[page.tsx] --> B(App);
-    B --> C{sessionStarted?};
-    C -- Yes --> D[SessionView];
-    C -- No --> E[Welcome];
-    D --> F[MediaTiles];
-    D --> G[AgentControlBar];
-    D --> H[ChatMessageView];
-    F --> I[AgentTile];
-    F --> J[AvatarTile];
-    G --> K[TrackToggle];
-    H --> L[ChatEntry];
-```
+![Component Architecture](assets/web_architecture.png)
 
 ## Components
 

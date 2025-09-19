@@ -15,20 +15,23 @@ graph TD
         A[Browser]
     end
 
-    subgraph "Frontend (Next.js on Vercel)"
+    subgraph "Frontend (Next.js)"
         B[Next.js App]
-        C[LiveKit Components]
     end
 
-    subgraph "Backend (FastAPI on Cloud Run)"
-        D[FastAPI Server]
-        E[LiveKit Service]
-        F[Transfer Service]
-        G[AI Agents]
+    subgraph "Backend (FastAPI)"
+        C[API Server]
+        D[LiveKit Service]
+        E[Transfer Service]
     end
 
     subgraph "LiveKit Cloud"
-        H[LiveKit SFU]
+        F[LiveKit SFU Room]
+    end
+
+    subgraph "AI Agent Workers"
+        G[Support Agent Worker]
+        H[Specialist Agent Worker]
     end
 
     subgraph "AI Services"
@@ -40,26 +43,30 @@ graph TD
     subgraph "LangGraph Workflows"
         L[Support Workflow]
         M[Chat Workflow]
-        N[decide_transfer_node]
-        O[specialist_node]
     end
 
-    A -- HTTPS --> B;
-    B -- Uses --> C;
-    C -- WebSocket --> H;
-    B -- API Calls --> D;
-    D -- Manages --> E;
-    D -- Manages --> F;
-    E -- Interacts with --> H;
-    F -- Coordinates --> G;
-    G -- Uses --> L;
-    G -- Uses --> M;
-    L -- Contains --> N;
-    M -- Contains --> O;
-    N -- Uses --> I;
-    O -- Uses --> I;
-    G -- Uses --> J;
-    G -- Uses --> K;
+    A -- "Interacts with" --> B;
+    B -- "API Calls" --> C;
+    B -- "Connects to" --> F;
+
+    C -- "Uses" --> D;
+    C -- "Uses" --> E;
+    D -- "Manages" --> F;
+
+    E -- "Dispatches" --> H;
+
+    G -- "Connects to" --> F;
+    H -- "Connects to" --> F;
+
+    G -- "Uses" --> J;
+    G -- "Uses" --> K;
+    G -- "Uses" --> L;
+    L -- "Uses" --> I;
+
+    H -- "Uses" --> J;
+    H -- "Uses" --> K;
+    H -- "Uses" --> M;
+    M -- "Uses" --> I;
 ```
 
 </details>
@@ -80,11 +87,13 @@ This repository is organized into two main parts:
 
 ## Getting Started
 
-To get started with Calby, you will need to set up both the `api` and `web` components of the application. Please refer to the detailed documentation in the `docs/` directory for setup instructions, architecture details, and more.
+For a complete guide on setting up the development environment, please see the [Setup Guide](docs/setup.md).
 
-- **Architecture Overview**: `docs/architecture.md`
-- **Backend Documentation**: `docs/api_documentation.md`
-- **Frontend Documentation**: `docs/frontend_documentation.md`
+To learn more about the architecture of the application, please refer to the following documents:
+
+- **Overall Architecture**: [Architecture Overview](docs/architecture.md)
+- **Backend Details**: [API Documentation](docs/api_documentation.md)
+- **Frontend Details**: [Frontend Documentation](docs/frontend.md)
 
 ## Technologies Used
 
